@@ -91,13 +91,29 @@
     white-space:nowrap;
   }
   .brand{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
     font-family:'Space Mono',monospace;
     font-size:12px;
+    font-weight:700;
     letter-spacing:0.18em;
-    color:var(--text-dim);
+    color:var(--orange);
     text-transform:uppercase;
-    margin-bottom:18px;
+    background:rgba(249,115,22,0.12);
+    border:1px solid rgba(249,115,22,0.35);
+    padding:6px 14px;
+    border-radius:100px;
+    margin-bottom:20px;
     position:relative;
+  }
+  .brand::before{
+    content:"";
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:var(--orange);
+    box-shadow:0 0 6px var(--orange);
   }
   .title{
     font-size:clamp(28px,5vw,44px);
@@ -110,8 +126,14 @@
     position:relative;
   }
   .tagline{
-    color:var(--text-dim);
-    font-size:16px;
+    display:inline-block;
+    font-weight:800;
+    font-size:19px;
+    letter-spacing:-0.01em;
+    background:var(--grad);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
     margin:0 0 20px;
     position:relative;
   }
