@@ -629,8 +629,6 @@ function render(){
     let chip;
     if (isQualified(p) && rank <= CONFIG.prizes){
       chip = '<span class="chip in">Qualified</span>';
-    } else if (isQualified(p)){
-      chip = '<span class="chip below">Target met — outside Top 20</span>';
     } else if (p.ftd===0 && p.spr===0){
       chip = '';
     } else {
