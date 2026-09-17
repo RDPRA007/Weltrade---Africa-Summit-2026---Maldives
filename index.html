@@ -605,7 +605,7 @@ function render(){
     // bars
     const barsEl = document.createElement('div');
     barsEl.className = 'bars';
-    barsEl.innerHTML = barsHtml(p);
+    barsEl.innerHTML = barsHtml(p, rank);
     row.appendChild(barsEl);
 
     // big number
@@ -625,10 +625,17 @@ function render(){
     board.appendChild(row);
   });
 
-  function barsHtml(p){
-    const chip = isQualified(p)
-      ? '<span class="chip in">Qualified</span>'
-      : (p.ftd===0 && p.spr===0 ? '' : '<span class="chip not">In progress</span>');
+  function barsHtml(p, rank){
+    let chip;
+    if (isQualified(p) && rank <= CONFIG.prizes){
+      chip = '<span class="chip in">Qualified</span>';
+    } else if (isQualified(p)){
+      chip = '<span class="chip below">Target met — outside Top 20</span>';
+    } else if (p.ftd===0 && p.spr===0){
+      chip = '';
+    } else {
+      chip = '<span class="chip not">In progress</span>';
+    }
     let missing = '';
     if (!isQualified(p) && !(p.ftd===0 && p.spr===0)){
       const parts = [];
