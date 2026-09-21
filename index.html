@@ -187,6 +187,29 @@
     color:var(--text-faint);
     margin-top:10px;
   }
+  .status-pill.closed{
+    border:1px solid rgba(249,115,22,0.35);
+    box-shadow:0 4px 16px rgba(249,115,22,0.18);
+  }
+  .status-dot.closed{
+    background:var(--orange);
+    box-shadow:0 0 8px var(--orange);
+    animation:none;
+  }
+  .closing-banner{
+    max-width:640px;
+    margin:18px auto 0;
+    padding:14px 22px;
+    border-radius:12px;
+    background:linear-gradient(90deg, rgba(59,130,246,0.12), rgba(249,115,22,0.12));
+    border:1px solid rgba(249,115,22,0.25);
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:15px;
+    color:var(--text);
+    text-align:center;
+    line-height:1.5;
+  }
   .status-dot{
     width:7px;height:7px;border-radius:50%;
     background:var(--green);
@@ -381,6 +404,8 @@
 </head>
 <body>
 
+<canvas id="fireworksCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999;"></canvas>
+
 <div class="hero">
   <div class="big-anniversary">
     <span class="num">20</span>
@@ -392,8 +417,9 @@
   <p class="event-loc"><span class="pin">📍</span><span class="loc-text">Maldives</span></p>
   <p class="tagline">Beat Your Best</p>
   <div class="period">20 August – 20 September 2026</div>
-  <div class="status-pill"><span class="status-dot"></span><span id="statusText">Tournament live</span></div>
+  <div class="status-pill closed"><span class="status-dot closed"></span><span id="statusText">Competition Closed</span></div>
   <div class="last-updated" id="lastUpdated"></div>
+  <div class="closing-banner">🎉 Weltrade thanks every partner who took part in the tournament. Results are now being validated, the final Top 20 will be confirmed shortly. 🎉</div>
 </div>
 
 <div class="wrap">
@@ -488,60 +514,60 @@ const CONFIG = {
 /* One line per partner. ftd and spr are ACHIEVEMENT PERCENTAGES ONLY.
    Never put target values or absolute FTD/Spread numbers here — privacy rule. */
 const DATA = [
-  { code:"65310", country:"", ftd:120.0, spr:220.3, prev:169.4 },
-  { code:"78746", country:"", ftd:260.0, spr:34.5, prev:137.2 },
-  { code:"76836", country:"", ftd:60.0, spr:79.3, prev:67.2 },
-  { code:"76493", country:"", ftd:135.7, spr:96.2, prev:111.8 },
-  { code:"66419", country:"", ftd:178.6, spr:131.8, prev:150.9 },
+  { code:"65310", country:"", ftd:120.0, spr:226.3, prev:170.2 },
+  { code:"78746", country:"", ftd:260.0, spr:34.5, prev:147.2 },
+  { code:"76836", country:"", ftd:60.0, spr:81.1, prev:69.7 },
+  { code:"76493", country:"", ftd:142.9, spr:97.0, prev:115.9 },
+  { code:"66419", country:"", ftd:178.6, spr:133.7, prev:155.2 },
   { code:"66398", country:"", ftd:0.0, spr:0.0, prev:0.0 },
-  { code:"65825", country:"", ftd:100.0, spr:266.4, prev:181.4 },
-  { code:"76506", country:"", ftd:40.0, spr:129.3, prev:83.8 },
-  { code:"76966", country:"", ftd:0.0, spr:173.4, prev:85.8 },
-  { code:"88986", country:"", ftd:115.6, spr:153.7, prev:131.7 },
-  { code:"104136", country:"", ftd:0.0, spr:62.5, prev:26.2 },
-  { code:"101669", country:"", ftd:246.7, spr:100.8, prev:167.0 },
-  { code:"64421", country:"", ftd:145.5, spr:94.4, prev:118.5 },
-  { code:"64132", country:"", ftd:102.5, spr:65.7, prev:83.3 },
-  { code:"90744", country:"", ftd:110.8, spr:92.1, prev:101.0 },
-  { code:"66733", country:"", ftd:184.6, spr:107.0, prev:141.5 },
-  { code:"68528", country:"", ftd:140.0, spr:89.0, prev:103.0 },
-  { code:"66471", country:"", ftd:20.0, spr:293.9, prev:142.6 },
-  { code:"66922", country:"", ftd:126.7, spr:221.2, prev:171.2 },
-  { code:"79245", country:"", ftd:46.7, spr:154.9, prev:99.2 },
-  { code:"66968", country:"", ftd:45.8, spr:102.8, prev:73.3 },
-  { code:"67390", country:"", ftd:44.4, spr:107.3, prev:75.6 },
+  { code:"65825", country:"", ftd:100.0, spr:270.4, prev:183.2 },
+  { code:"76506", country:"", ftd:40.0, spr:131.0, prev:84.7 },
+  { code:"76966", country:"", ftd:0.0, spr:176.4, prev:86.7 },
+  { code:"88986", country:"", ftd:116.7, spr:156.4, prev:134.6 },
+  { code:"104136", country:"", ftd:0.0, spr:70.1, prev:31.2 },
+  { code:"101669", country:"", ftd:246.7, spr:100.8, prev:173.8 },
+  { code:"64421", country:"", ftd:145.5, spr:96.9, prev:120.0 },
+  { code:"64132", country:"", ftd:102.5, spr:66.4, prev:84.1 },
+  { code:"90744", country:"", ftd:110.8, spr:92.5, prev:101.4 },
+  { code:"66733", country:"", ftd:184.6, spr:108.4, prev:145.8 },
+  { code:"68528", country:"", ftd:140.0, spr:93.6, prev:114.5 },
+  { code:"66471", country:"", ftd:20.0, spr:319.8, prev:156.9 },
+  { code:"66922", country:"", ftd:126.7, spr:224.3, prev:173.9 },
+  { code:"79245", country:"", ftd:46.7, spr:158.5, prev:100.8 },
+  { code:"66968", country:"", ftd:45.8, spr:104.6, prev:74.3 },
+  { code:"67390", country:"", ftd:44.4, spr:107.9, prev:75.8 },
   { code:"100248", country:"", ftd:0.0, spr:1.3, prev:0.7 },
-  { code:"72080", country:"", ftd:200.0, spr:100.2, prev:149.1 },
-  { code:"70167", country:"", ftd:160.0, spr:233.5, prev:196.3 },
+  { code:"72080", country:"", ftd:208.3, spr:102.0, prev:150.1 },
+  { code:"70167", country:"", ftd:160.0, spr:234.5, prev:196.8 },
   { code:"104152", country:"", ftd:0.0, spr:0.0, prev:0.0 },
   { code:"100728", country:"", ftd:0.0, spr:7.5, prev:3.8 },
   { code:"103622", country:"", ftd:80.0, spr:50.2, prev:65.1 },
-  { code:"73000", country:"", ftd:32.0, spr:87.9, prev:59.2 },
-  { code:"63703", country:"", ftd:100.0, spr:98.9, prev:87.2 },
-  { code:"79641", country:"", ftd:43.3, spr:139.0, prev:89.8 },
-  { code:"82477", country:"", ftd:560.0, spr:61.0, prev:299.3 },
-  { code:"92432", country:"", ftd:0.0, spr:56.0, prev:26.9 },
-  { code:"63512", country:"", ftd:131.0, spr:254.0, prev:188.8 },
-  { code:"67375", country:"", ftd:10.0, spr:104.0, prev:56.6 },
-  { code:"64634", country:"", ftd:10.0, spr:84.1, prev:45.2 },
-  { code:"68721", country:"", ftd:80.0, spr:90.9, prev:84.2 },
-  { code:"65059", country:"", ftd:285.7, spr:57.6, prev:148.9 },
-  { code:"76293", country:"", ftd:180.0, spr:102.3, prev:128.4 },
-  { code:"78853", country:"", ftd:0.0, spr:60.0, prev:25.1 },
+  { code:"73000", country:"", ftd:32.0, spr:89.2, prev:60.0 },
+  { code:"63703", country:"", ftd:100.0, spr:103.4, prev:99.5 },
+  { code:"79641", country:"", ftd:43.3, spr:139.3, prev:91.2 },
+  { code:"82477", country:"", ftd:560.0, spr:61.8, prev:310.5 },
+  { code:"92432", country:"", ftd:0.0, spr:59.0, prev:28.0 },
+  { code:"63512", country:"", ftd:131.0, spr:256.9, prev:192.5 },
+  { code:"67375", country:"", ftd:10.0, spr:104.8, prev:57.0 },
+  { code:"64634", country:"", ftd:10.0, spr:85.8, prev:47.0 },
+  { code:"68721", country:"", ftd:80.0, spr:93.6, prev:85.5 },
+  { code:"65059", country:"", ftd:300.0, spr:58.2, prev:171.7 },
+  { code:"76293", country:"", ftd:195.0, spr:108.2, prev:141.2 },
+  { code:"78853", country:"", ftd:0.0, spr:63.4, prev:30.0 },
   { code:"75840", country:"", ftd:0.0, spr:1.7, prev:0.8 },
-  { code:"67317", country:"", ftd:388.9, spr:162.7, prev:270.9 },
-  { code:"67919", country:"", ftd:90.0, spr:48.6, prev:69.0 },
-  { code:"71436", country:"", ftd:20.0, spr:56.1, prev:37.2 },
-  { code:"67315", country:"", ftd:100.0, spr:34.3, prev:66.5 },
-  { code:"78973", country:"", ftd:191.7, spr:125.1, prev:157.0 },
-  { code:"97293", country:"", ftd:0.0, spr:193.1, prev:91.7 },
-  { code:"72933", country:"", ftd:10.0, spr:77.1, prev:42.7 },
-  { code:"67048", country:"", ftd:60.0, spr:168.8, prev:113.6 },
-  { code:"69216", country:"", ftd:820.0, spr:242.6, prev:528.7 },
-  { code:"64277", country:"", ftd:28.6, spr:61.1, prev:44.2 },
-  { code:"73579", country:"", ftd:57.1, spr:131.8, prev:88.8 },
-  { code:"65190", country:"", ftd:200.0, spr:173.7, prev:185.2 },
-  { code:"61460", country:"", ftd:80.0, spr:50.8, prev:64.6 },
+  { code:"67317", country:"", ftd:388.9, spr:165.0, prev:275.8 },
+  { code:"67919", country:"", ftd:90.0, spr:48.9, prev:69.3 },
+  { code:"71436", country:"", ftd:20.0, spr:56.8, prev:38.0 },
+  { code:"67315", country:"", ftd:100.0, spr:35.4, prev:67.2 },
+  { code:"78973", country:"", ftd:200.0, spr:126.4, prev:158.4 },
+  { code:"97293", country:"", ftd:0.0, spr:194.5, prev:96.5 },
+  { code:"72933", country:"", ftd:10.0, spr:79.1, prev:43.5 },
+  { code:"67048", country:"", ftd:60.0, spr:169.6, prev:114.4 },
+  { code:"69216", country:"", ftd:820.0, spr:244.8, prev:531.3 },
+  { code:"64277", country:"", ftd:28.6, spr:62.4, prev:44.9 },
+  { code:"73579", country:"", ftd:57.1, spr:146.4, prev:94.5 },
+  { code:"65190", country:"", ftd:220.0, spr:174.4, prev:186.8 },
+  { code:"61460", country:"", ftd:80.0, spr:52.1, prev:65.4 },
 ];
 
 /* ============ LOGIC ============ */
@@ -685,7 +711,7 @@ document.getElementById('searchBox').addEventListener('input', function(e){
     verdictEl.textContent = `You're inside the Top ${CONFIG.prizes}, currently ranked #${rank}. Keep pushing to protect your position.`;
   } else if (isQualified(p)){
     verdictEl.className = 'verdict v-below';
-    verdictEl.textContent = `You've qualified (Tournament Score ${Math.round(score)}%), but you're currently below the cut line at rank #${rank}. Push further above 100% to move up.`;
+    verdictEl.textContent = `Your Tournament Score is ${Math.round(score)}%, but you're currently ranked #${rank}, outside the Top ${CONFIG.prizes}. Keep pushing to move up.`;
   } else {
     verdictEl.className = 'verdict v-not';
     verdictEl.textContent = `Your advantage is zero until both metrics reach 100%, however far past the line the other one goes. Focus on your lower metric first.`;
@@ -694,6 +720,77 @@ document.getElementById('searchBox').addEventListener('input', function(e){
 });
 
 render();
+
+/* ============ FIREWORKS (competition closed celebration) ============ */
+(function(){
+  const canvas = document.getElementById('fireworksCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const colors = ['#3b82f6','#f97316','#22c55e','#eef0f3','#f59e0b'];
+  let particles = [];
+
+  function spawnBurst(x, y){
+    const count = 44;
+    for (let i=0; i<count; i++){
+      const angle = (Math.PI*2*i)/count + Math.random()*0.2;
+      const speed = 2 + Math.random()*3.2;
+      particles.push({
+        x, y,
+        vx: Math.cos(angle)*speed,
+        vy: Math.sin(angle)*speed,
+        life: 1,
+        decay: 0.010 + Math.random()*0.012,
+        color: colors[Math.floor(Math.random()*colors.length)],
+        size: 2 + Math.random()*2
+      });
+    }
+  }
+
+  function tick(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p=>{
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.045; // gravity
+      p.life -= p.decay;
+    });
+    particles = particles.filter(p=>p.life > 0);
+    particles.forEach(p=>{
+      ctx.globalAlpha = Math.max(p.life, 0);
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(tick);
+  }
+  tick();
+
+  function randomBurst(){
+    const x = canvas.width * (0.15 + Math.random()*0.7);
+    const y = canvas.height * (0.12 + Math.random()*0.35);
+    spawnBurst(x, y);
+  }
+
+  // Initial celebratory volley on load
+  let launched = 0;
+  const launchInterval = setInterval(()=>{
+    randomBurst();
+    launched++;
+    if (launched >= 8){ clearInterval(launchInterval); }
+  }, 260);
+
+  // Gentle occasional bursts afterward so the page still feels alive
+  setInterval(()=>{
+    if (Math.random() < 0.6) randomBurst();
+  }, 4500);
+})();
+
 </script>
 </body>
 </html>
